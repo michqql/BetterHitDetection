@@ -1,0 +1,13 @@
+id: 'default'
+cooldownLength: 6
+toolDependant: false
+cancelOnCooldown: true
+kbX: 0.4
+kbY: 2.4
+comboPeriod: -1
+comboX: 1
+comboY: 1
+comboDamageMultiplier: 1
+potX: 1.0
+potY: 1.0
+damageCalculator: 'nms'

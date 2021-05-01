@@ -1,0 +1,16 @@
+main: me.michqql.bhd.BetterHitDetectionPlugin
+name: BetterHitDetection
+version: 0.3.1
+
+api-version: 1.16
+
+softdepend:
+  - InventoryLib
+
+commands:
+  betterhitdetection:
+    aliases: ['bhd']
+  kb:
+    aliases: ['knockback']
+  preset: {}
+  damage: {}

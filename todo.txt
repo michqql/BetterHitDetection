@@ -1,0 +1,12 @@
+Todo:
+
+- calculate accurate damage    [DONE]
+- per player settings          [DONE]
+- gui's                        [DONE]
+- default anti cheat detection [DONE]
+  > 3 blocks max range
+
+##################################
+Ideas:
+- armor knockback?
+- pitched based pot throw distance

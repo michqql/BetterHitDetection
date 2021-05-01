@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="InventoryLib-1.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Spigot/APIs/InventoryLib-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

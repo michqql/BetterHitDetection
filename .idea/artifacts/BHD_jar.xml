@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BHD:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BHD_jar</output-path>
+    <root id="archive" name="BHD.jar">
+      <element id="module-output" name="BHD" />
+    </root>
+  </artifact>
+</component>

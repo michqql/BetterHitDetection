@@ -1,0 +1,18 @@
+<>----COOLDOWN----<>
+cooldownLength - the length of time the player is on cooldown for (base)
+cancelOnCooldown - should hits while on cooldown be cancelled? (otherwise damage will be reduced)
+immunityTicks - length of time the damaged player cannot be hit for
+
+<>---KNOCKBACK----<>
+kbX - the horizontal multiplier
+kbY - the vertical multiplier
+
+<>-----COMBO------<>
+comboPeriod - the duration of ticks where extra hits will be counted as a combo
+            - if set to less than the cooldownLength (or -1), it will be impossible to combo
+comboX - the horizontal multiplier
+comboY - the vertical multiplier
+
+<>-----POTS------<>
+potX - the horizontal multiplier
+potY - the vertical multiplier

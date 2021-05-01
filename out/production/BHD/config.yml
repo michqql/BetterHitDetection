@@ -1,0 +1,8 @@
+# <>----------------<>
+# <     Settings     >
+# <>----------------<>
+# See info.txt file for information about variables
+
+# Currently active global settings preset
+# See folder /presets to manually edit preset files
+global-active-preset: 'default'
