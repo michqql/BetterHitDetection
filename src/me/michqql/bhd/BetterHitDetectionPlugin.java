@@ -4,6 +4,7 @@ import me.michqql.bhd.commands.BetterHitDetectionCommand;
 import me.michqql.bhd.commands.DamageCalculatorCommand;
 import me.michqql.bhd.commands.PresetCommand;
 import me.michqql.bhd.commands.KnockBackCommand;
+import me.michqql.bhd.damage.DamageCalculatorHandler;
 import me.michqql.bhd.data.ConfigFile;
 import me.michqql.bhd.data.InfoFile;
 import me.michqql.bhd.nms.HitDetection;
@@ -25,37 +26,33 @@ import java.util.logging.Level;
 
 public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
 
-    private static BetterHitDetectionPlugin instance;
-
-    public static BetterHitDetectionPlugin getInstance() {
-        return instance;
-    }
-
-    private PresetHandler presetHandler;
+    /* HANDLERS */
     private HitDetection hitDetectionHandler;
+    private PresetHandler presetHandler;
+    private DamageCalculatorHandler damageCalculatorHandler;
+    private PlayerHandler playerHandler;
+
+    /* HOOKS */
     private boolean useInventoryLib = false;
     private String craftBukkitVersion;
 
     @Override
     public void onEnable() {
-        instance = this;
-
-        ConfigFile config = new ConfigFile(this, null, "config", "yml");
+        final ConfigFile config = new ConfigFile(this, null, "config", "yml");
         new InfoFile(this, null, "info");
 
-        // Create handlers
-        setupPresetManager(config.getConfig().getString("global-active-preset"));
-        setupHitDetectionManager();
+        /* SETUP HANDLERS */
+        this.damageCalculatorHandler = new DamageCalculatorHandler();
+        setupPresetHandler(config.getConfig().getString("global-active-preset"));
+        setupHitDetectionHandler();
         setupInventoryLib();
+        this.playerHandler = new PlayerHandler();
 
         // Register this class as a listener
         getServer().getPluginManager().registerEvents(this, this);
 
         // Commands
-        Objects.requireNonNull(getCommand("betterhitdetection")).setExecutor(new BetterHitDetectionCommand(presetHandler));
-        Objects.requireNonNull(getCommand("kb")).setExecutor(new KnockBackCommand(presetHandler));
-        Objects.requireNonNull(getCommand("preset")).setExecutor(new PresetCommand(presetHandler));
-        Objects.requireNonNull(getCommand("damage")).setExecutor(new DamageCalculatorCommand(presetHandler, hitDetectionHandler));
+        registerCommands();
     }
 
     @Override
@@ -68,18 +65,31 @@ public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        new PlayerData(e.getPlayer());
+        new PlayerData(playerHandler, e.getPlayer());
         hitDetectionHandler.inject(e.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         hitDetectionHandler.deInject(e.getPlayer());
-
-        PlayerHandler.unregisterPlayer(e.getPlayer().getUniqueId());
+        playerHandler.unregisterPlayer(e.getPlayer().getUniqueId());
     }
 
-    private void setupHitDetectionManager() {
+    private void registerCommands() {
+        Objects.requireNonNull(getCommand("betterhitdetection"))
+                .setExecutor(new BetterHitDetectionCommand(this, presetHandler));
+
+        Objects.requireNonNull(getCommand("kb"))
+                .setExecutor(new KnockBackCommand(presetHandler));
+
+        Objects.requireNonNull(getCommand("preset"))
+                .setExecutor(new PresetCommand(this, presetHandler, playerHandler));
+
+        Objects.requireNonNull(getCommand("damageCalculator"))
+                .setExecutor(new DamageCalculatorCommand(damageCalculatorHandler, presetHandler, hitDetectionHandler));
+    }
+
+    private void setupHitDetectionHandler() {
         this.craftBukkitVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
         Bukkit.getLogger().log(Level.INFO, "[BHD] Found server version: " + craftBukkitVersion);
@@ -89,18 +99,24 @@ public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
         String versionPath = packageName + "." + className + "_" + craftBukkitVersion;
 
         try {
-            Constructor<?> constructor = Class.forName(versionPath).getDeclaredConstructor(Plugin.class, PresetHandler.class);
+            Constructor<?> constructor = Class.forName(versionPath).getDeclaredConstructor(
+                    BetterHitDetectionPlugin.class,
+                    DamageCalculatorHandler.class,
+                    PresetHandler.class,
+                    PlayerHandler.class
+            );
             constructor.setAccessible(true);
 
-            this.hitDetectionHandler = (HitDetection) constructor.newInstance(this, presetHandler);
+            this.hitDetectionHandler = (HitDetection) constructor.newInstance(this, damageCalculatorHandler, presetHandler, playerHandler);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "An error has occurred while setting up hit detection handler");
             e.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
 
-    private void setupPresetManager(String globalPreset) {
-        this.presetHandler = new PresetHandler();
+    private void setupPresetHandler(String globalPreset) {
+        this.presetHandler = new PresetHandler(this);
         presetHandler.loadPresets();
         presetHandler.setGlobalPreset(presetHandler.getPreset(globalPreset));
     }

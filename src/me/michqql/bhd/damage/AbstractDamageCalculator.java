@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 
 public abstract class AbstractDamageCalculator {
 
-    public AbstractDamageCalculator() {
-        DamageCalculatorHandler.registerCalculator(this);
+    public AbstractDamageCalculator(DamageCalculatorHandler damageCalculatorHandler) {
+        damageCalculatorHandler.registerCalculator(this);
     }
 
     /**

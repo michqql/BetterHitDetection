@@ -1,12 +1,9 @@
-Todo:
+Todo (0.4.1) update:
+- pot throw           [----]    --> for 0.4.2
+- non-static handlers [DONE]
+- redo theme          [DONE]
 
-- calculate accurate damage    [DONE]
-- per player settings          [DONE]
-- gui's                        [DONE]
-- default anti cheat detection [DONE]
-  > 3 blocks max range
-
-##################################
-Ideas:
-- armor knockback?
-- pitched based pot throw distance
+Handlers:
+ - main class
+ - damage handler
+ - player handler

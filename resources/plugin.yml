@@ -1,6 +1,6 @@
 main: me.michqql.bhd.BetterHitDetectionPlugin
 name: BetterHitDetection
-version: 0.3.1
+version: 0.4.1
 
 api-version: 1.16
 
@@ -12,5 +12,7 @@ commands:
     aliases: ['bhd']
   kb:
     aliases: ['knockback']
-  preset: {}
-  damage: {}
+  preset:
+    aliases: ['profile']
+  damageCalculator:
+    aliases: ['damage','dc']

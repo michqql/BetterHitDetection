@@ -1,29 +1,40 @@
 package me.michqql.bhd.nms;
 
+import me.michqql.bhd.BetterHitDetectionPlugin;
 import me.michqql.bhd.damage.AbstractDamageCalculator;
-import me.michqql.bhd.damage.calculators.VanillaDamageCalculator;
+import me.michqql.bhd.damage.DamageCalculatorHandler;
 import me.michqql.bhd.events.PlayerAttackPlayerEvent;
 import me.michqql.bhd.player.PlayerData;
+import me.michqql.bhd.player.PlayerHandler;
 import me.michqql.bhd.presets.PresetHandler;
 import me.michqql.bhd.presets.Settings;
-import me.michqql.bhd.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public abstract class HitDetection {
 
     protected final static String CHANNEL_NAME = "better_hit_detection";
 
-    protected final Plugin plugin;
+    protected final BetterHitDetectionPlugin plugin;
+
+    /* HANDLERS */
+    protected final DamageCalculatorHandler damageCalculatorHandler;
     protected final PresetHandler presetHandler;
+    protected final PlayerHandler playerHandler;
 
-    private AbstractDamageCalculator damageCalculator = new VanillaDamageCalculator();
+    private AbstractDamageCalculator damageCalculator;
 
-    public HitDetection(Plugin plugin, PresetHandler presetHandler) {
+    public HitDetection(BetterHitDetectionPlugin plugin,
+                        DamageCalculatorHandler damageCalculatorHandler,
+                        PresetHandler presetHandler,
+                        PlayerHandler playerHandler) {
         this.plugin = plugin;
+        this.damageCalculatorHandler = damageCalculatorHandler;
         this.presetHandler = presetHandler;
+        this.playerHandler = playerHandler;
+
+        this.damageCalculator = damageCalculatorHandler.getDamageCalculator(presetHandler.getGlobalPreset().getSettings().damageHandler);
     }
 
     protected boolean handleDamageAndIsCancelled(Player attacker, Player damaged) {

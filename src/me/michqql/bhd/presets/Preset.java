@@ -1,7 +1,7 @@
 package me.michqql.bhd.presets;
 
-import me.michqql.bhd.BetterHitDetectionPlugin;
 import me.michqql.bhd.data.PresetDataFile;
+import org.bukkit.plugin.Plugin;
 
 public class Preset {
 
@@ -9,9 +9,9 @@ public class Preset {
     private final PresetDataFile file;
     private Settings settings;
 
-    public Preset(PresetHandler presetHandler, String id) {
+    public Preset(Plugin plugin, PresetHandler presetHandler, String id) {
         this.id = id;
-        this.file = new PresetDataFile(BetterHitDetectionPlugin.getInstance(), id);
+        this.file = new PresetDataFile(plugin, id);
         load();
 
         presetHandler.registerPreset(this);

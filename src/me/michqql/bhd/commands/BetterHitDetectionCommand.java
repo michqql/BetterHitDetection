@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 
 public class BetterHitDetectionCommand implements CommandExecutor {
 
+    private final BetterHitDetectionPlugin plugin;
     private final PresetHandler presetHandler;
 
-    public BetterHitDetectionCommand(PresetHandler presetHandler) {
+    public BetterHitDetectionCommand(BetterHitDetectionPlugin plugin, PresetHandler presetHandler) {
+        this.plugin = plugin;
         this.presetHandler = presetHandler;
     }
 
@@ -29,13 +31,13 @@ public class BetterHitDetectionCommand implements CommandExecutor {
             return true;
         }
 
-        if(!BetterHitDetectionPlugin.getInstance().useInventoryLib()) {
+        if(!plugin.useInventoryLib()) {
             sender.sendMessage(ChatColor.DARK_RED + "Required dependency is not installed.");
             sender.sendMessage(ChatColor.DARK_RED + "Please install InventoryLib to use GUI's!");
             return true;
         }
 
-        new MainGUI(BetterHitDetectionPlugin.getInstance(), (Player) sender, presetHandler).openGUI();
+        new MainGUI(plugin, (Player) sender, presetHandler).openGUI();
         return true;
     }
 }

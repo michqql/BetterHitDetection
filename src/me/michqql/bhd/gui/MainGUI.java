@@ -18,10 +18,12 @@ public class MainGUI extends GUI {
     private final static int PRESETS = 2;
     private final static int INFO = 0;
 
+    private final String craftBukkitVersion;
     private final PresetHandler presetHandler;
 
-    public MainGUI(Plugin bukkitPlugin, Player player, PresetHandler presetHandler) {
-        super(bukkitPlugin, player);
+    public MainGUI(BetterHitDetectionPlugin plugin, Player player, PresetHandler presetHandler) {
+        super(plugin, player);
+        this.craftBukkitVersion = plugin.getCraftBukkitVersion();
         this.presetHandler = presetHandler;
         build("&9BetterHitDetection", 1);
     }
@@ -51,7 +53,7 @@ public class MainGUI extends GUI {
                 meta.setDisplayName(ChatColor.BLUE + "BetterHitDetection");
                 meta.setLore(Arrays.asList(
                         ChatColor.GRAY + "Plugin version: " + bukkitPlugin.getDescription().getVersion(),
-                        ChatColor.GRAY + "Server version: " + BetterHitDetectionPlugin.getInstance().getCraftBukkitVersion()
+                        ChatColor.GRAY + "Server version: " + craftBukkitVersion
                 ));
                 item.setItemMeta(meta);
             }

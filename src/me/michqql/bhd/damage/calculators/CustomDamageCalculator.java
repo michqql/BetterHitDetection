@@ -1,22 +1,25 @@
 package me.michqql.bhd.damage.calculators;
 
 import me.michqql.bhd.damage.AbstractDamageCalculator;
+import me.michqql.bhd.damage.DamageCalculatorHandler;
 import me.michqql.bhd.damage.DamageUtil;
 import me.michqql.bhd.util.BlockUtil;
 import me.michqql.bhd.util.PlayerUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class CustomDamageCalculator extends AbstractDamageCalculator {
+
+    public CustomDamageCalculator(DamageCalculatorHandler damageCalculatorHandler) {
+        super(damageCalculatorHandler);
+    }
 
     @Override
     public String getId() {

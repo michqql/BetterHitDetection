@@ -4,6 +4,8 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
+import me.michqql.bhd.BetterHitDetectionPlugin;
+import me.michqql.bhd.damage.DamageCalculatorHandler;
 import me.michqql.bhd.player.PlayerData;
 import me.michqql.bhd.player.PlayerHandler;
 import me.michqql.bhd.presets.PresetHandler;
@@ -16,14 +18,16 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerVelocityEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 @SuppressWarnings("unused")
 public class HitDetection_v1_8_R3 extends HitDetection {
 
-    public HitDetection_v1_8_R3(Plugin plugin, PresetHandler presetHandler) {
-        super(plugin, presetHandler);
+    public HitDetection_v1_8_R3(BetterHitDetectionPlugin plugin,
+                                DamageCalculatorHandler damageCalculatorHandler,
+                                PresetHandler presetHandler,
+                                PlayerHandler playerHandler) {
+        super(plugin, damageCalculatorHandler, presetHandler, playerHandler);
     }
 
     @Override
@@ -80,8 +84,8 @@ public class HitDetection_v1_8_R3 extends HitDetection {
         if(!damaged.isAlive())
             return;
 
-        PlayerData attackerData = PlayerHandler.getPlayerData(attacker.getUniqueID());
-        PlayerData damagedData = PlayerHandler.getPlayerData(damaged.getUniqueID());
+        PlayerData attackerData = playerHandler.getPlayerData(attacker.getUniqueID());
+        PlayerData damagedData = playerHandler.getPlayerData(damaged.getUniqueID());
         Settings settings = (attackerData.getLocalPreset() != null ?
                 attackerData.getLocalPreset().getSettings() :
                 presetHandler.getGlobalPreset().getSettings());
@@ -112,7 +116,7 @@ public class HitDetection_v1_8_R3 extends HitDetection {
         damagedData.lastHitTime = now;
 
         // Hit effect]
-        SoundUtil.playSound(damagedData.player);
+        SoundUtil.playSound(plugin, damagedData.player.getLocation());
 
         PacketPlayOutEntityStatus status = new PacketPlayOutEntityStatus(damaged, (byte) 2);
         for(Player online : Bukkit.getOnlinePlayers()) {

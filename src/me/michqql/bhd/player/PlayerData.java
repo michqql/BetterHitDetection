@@ -11,13 +11,13 @@ public class PlayerData {
 
     private Preset localPreset;
 
-    public PlayerData(Player player) {
+    public PlayerData(PlayerHandler playerHandler, Player player) {
         this.player = player;
         this.joinTime = System.currentTimeMillis();
 
         this.lastAttackTime = System.currentTimeMillis();
 
-        PlayerHandler.registerPlayer(this);
+        playerHandler.registerPlayer(this);
     }
 
     public long getTimeSinceLastAttack() {

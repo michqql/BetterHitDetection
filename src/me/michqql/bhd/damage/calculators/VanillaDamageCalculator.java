@@ -1,6 +1,7 @@
 package me.michqql.bhd.damage.calculators;
 
 import me.michqql.bhd.damage.AbstractDamageCalculator;
+import me.michqql.bhd.damage.DamageCalculatorHandler;
 import me.michqql.bhd.damage.DamageUtil;
 import me.michqql.bhd.util.BlockUtil;
 import me.michqql.bhd.util.PlayerUtil;
@@ -15,6 +16,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class VanillaDamageCalculator extends AbstractDamageCalculator {
+
+    public VanillaDamageCalculator(DamageCalculatorHandler damageCalculatorHandler) {
+        super(damageCalculatorHandler);
+    }
 
     @Override
     public String getId() {
