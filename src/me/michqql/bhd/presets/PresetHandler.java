@@ -1,6 +1,7 @@
 package me.michqql.bhd.presets;
 
 import me.michqql.bhd.BetterHitDetectionPlugin;
+import me.michqql.bhd.player.PlayerData;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -39,11 +40,18 @@ public class PresetHandler {
     }
 
     public void setGlobalPreset(Preset globalPreset) {
+        if(globalPreset == null)
+            return;
+
         this.globalPreset = globalPreset;
     }
 
     public Preset getPreset(String id) {
         return REGISTERED_PRESETS.getOrDefault(id, basePreset);
+    }
+
+    public Preset getPreset(PlayerData data) {
+        return data.getLocalPreset() != null ? data.getLocalPreset() : globalPreset;
     }
 
     public boolean hasPreset(String id) {

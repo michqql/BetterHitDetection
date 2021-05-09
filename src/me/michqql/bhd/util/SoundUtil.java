@@ -20,7 +20,7 @@ public class SoundUtil {
             case "v1_15_R1":
             case "v1_14_R1":
             case "v1_12_R1":
-                world.playSound(location, Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0f, 1.0f);
+                world.playSound(location, Sound.ENTITY_GENERIC_HURT, 1.0f, 1.0f);
                 break;
 
             case "v1_8_R3":

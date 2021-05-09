@@ -103,6 +103,7 @@ public class PresetCommand implements CommandExecutor {
             if(args.length < 3) {
                 sender.sendMessage(ChatColor.DARK_RED + "/preset apply <presetName> <playerName>");
                 sender.sendMessage(ChatColor.WHITE + "Applies the specified preset to the player");
+                sender.sendMessage(ChatColor.WHITE + "To view, simple set <presetName> to '-v'");
                 sender.sendMessage(ChatColor.WHITE + "To remove, simple set <presetName> to '-r'");
                 return true;
             }
@@ -119,7 +120,13 @@ public class PresetCommand implements CommandExecutor {
             PlayerData data = playerHandler.getPlayerData(player.getUniqueId());
 
             // Remove the preset
-            if(presetName.equalsIgnoreCase("-r")) {
+            if(presetName.equalsIgnoreCase("-v")) {
+                Preset preset = data.getLocalPreset();
+                sender.sendMessage(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " has preset " +
+                        (preset == null ? ("(Global) " + presetHandler.getGlobalPreset().getId()) : preset.getId()));
+                return true;
+            }
+            else if(presetName.equalsIgnoreCase("-r")) {
                 data.setLocalPreset(null);
                 sender.sendMessage(ChatColor.GREEN + "Removed preset from " + ChatColor.YELLOW + player.getName());
                 return true;

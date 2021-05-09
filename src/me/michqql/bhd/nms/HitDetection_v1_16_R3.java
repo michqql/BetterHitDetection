@@ -87,9 +87,7 @@ public class HitDetection_v1_16_R3 extends HitDetection {
         PlayerData attackerData = playerHandler.getPlayerData(attacker.getUniqueID());
         PlayerData damagedData = playerHandler.getPlayerData(damaged.getUniqueID());
 
-        Settings attackerSettings = (attackerData.getLocalPreset() != null ?
-                attackerData.getLocalPreset().getSettings() :
-                presetHandler.getGlobalPreset().getSettings());
+        Settings attackerSettings = presetHandler.getPreset(attackerData).getSettings();
 
         if(PlayerUtil.failsRangeCheck(attackerData.player, damagedData.player))
             return;
@@ -110,7 +108,7 @@ public class HitDetection_v1_16_R3 extends HitDetection {
         // An event, PlayerAttackPlayerEvent, is then called and if not cancelled,
         // the damaged is applied
         // If the event is cancelled, the method returns true, signifying to return here.
-        if(handleDamageAndIsCancelled(attacker.getBukkitEntity(), damaged.getBukkitEntity()))
+        if(handleDamageAndIsCancelled(attackerData, damagedData))
             return;
 
         attackerData.lastAttackTime = now;
@@ -129,17 +127,11 @@ public class HitDetection_v1_16_R3 extends HitDetection {
 
         // Knockback
         Vec3D victimMotion = damaged.getMot();
-
-        double motX = -MathHelper.sin((float) (attacker.yaw * Math.PI / 180.0F)) * attackerSettings.kbX;
-        double motY = 0.1D * attackerSettings.kbY;
-        double motZ = MathHelper.cos((float) (attacker.yaw * Math.PI / 180.0F)) * attackerSettings.kbX;
-
-        double comboX = attackCooldownMS < (attackerSettings.comboPeriod * 50) ? attackerSettings.comboX : 1.0D;
-        double comboY = attackCooldownMS < (attackerSettings.comboPeriod * 50) ? attackerSettings.comboY : 1.0D;
+        double[] knockback = damageCalculator.calculateKnockback(attackerData, damagedData);
 
         Bukkit.getScheduler().runTask(plugin, () -> {
             damaged.velocityChanged = true;
-            damaged.setMot(motX * comboX, motY * comboY, motZ * comboX);
+            damaged.setMot(knockback[0], knockback[1], knockback[2]);
 
             PlayerVelocityEvent velocityEvent = new PlayerVelocityEvent(damaged.getBukkitEntity(), damaged.getBukkitEntity().getVelocity());
             Bukkit.getPluginManager().callEvent(velocityEvent);

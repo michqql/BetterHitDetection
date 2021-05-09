@@ -109,7 +109,7 @@ public class HitDetection_v1_12_R1 extends HitDetection {
         // An event, PlayerAttackPlayerEvent, is then called and if not cancelled,
         // the damaged is applied
         // If the event is cancelled, the method returns true, signifying to return here.
-        if(handleDamageAndIsCancelled(attacker.getBukkitEntity(), damaged.getBukkitEntity()))
+        if(handleDamageAndIsCancelled(attackerData, damagedData))
             return;
 
         attackerData.lastAttackTime = now;

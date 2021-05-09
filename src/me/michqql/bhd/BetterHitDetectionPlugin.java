@@ -1,5 +1,6 @@
 package me.michqql.bhd;
 
+import me.michqql.bhd.api.BetterHitDetectionAPI;
 import me.michqql.bhd.commands.BetterHitDetectionCommand;
 import me.michqql.bhd.commands.DamageCalculatorCommand;
 import me.michqql.bhd.commands.PresetCommand;
@@ -16,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
@@ -36,23 +36,28 @@ public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
     private boolean useInventoryLib = false;
     private String craftBukkitVersion;
 
+    /* API */
+    private BetterHitDetectionAPI api;
+
     @Override
     public void onEnable() {
         final ConfigFile config = new ConfigFile(this, null, "config", "yml");
         new InfoFile(this, null, "info");
 
         /* SETUP HANDLERS */
-        this.damageCalculatorHandler = new DamageCalculatorHandler();
         setupPresetHandler(config.getConfig().getString("global-active-preset"));
+        this.damageCalculatorHandler = new DamageCalculatorHandler(this, presetHandler);
+        this.playerHandler = new PlayerHandler();
         setupHitDetectionHandler();
         setupInventoryLib();
-        this.playerHandler = new PlayerHandler();
 
         // Register this class as a listener
         getServer().getPluginManager().registerEvents(this, this);
 
         // Commands
         registerCommands();
+
+        this.api = new BetterHitDetectionAPI(damageCalculatorHandler, presetHandler, hitDetectionHandler, playerHandler);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
 
     private void registerCommands() {
         Objects.requireNonNull(getCommand("betterhitdetection"))
-                .setExecutor(new BetterHitDetectionCommand(this, presetHandler));
+                .setExecutor(new BetterHitDetectionCommand(this, presetHandler, damageCalculatorHandler));
 
         Objects.requireNonNull(getCommand("kb"))
                 .setExecutor(new KnockBackCommand(presetHandler));
@@ -134,5 +139,9 @@ public class BetterHitDetectionPlugin extends JavaPlugin implements Listener {
 
     public String getCraftBukkitVersion() {
         return craftBukkitVersion;
+    }
+
+    public BetterHitDetectionAPI getApi() {
+        return api;
     }
 }

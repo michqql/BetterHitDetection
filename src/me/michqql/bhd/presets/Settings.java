@@ -52,7 +52,7 @@ public class Settings {
         this.potX = f.getDouble("potX");
         this.potY = f.getDouble("potY");
 
-        this.damageHandler = f.getString("damageHandler");
+        this.damageHandler = f.getString("damageCalculator");
     }
 
     public void save(PresetDataFile file) {
@@ -73,7 +73,7 @@ public class Settings {
         f.set("potX", potX);
         f.set("potY", potY);
 
-        f.set("damageHandler", damageHandler);
+        f.set("damageCalculator", damageHandler);
 
         file.save();
     }

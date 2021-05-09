@@ -23,7 +23,7 @@ public abstract class HitDetection {
     protected final PresetHandler presetHandler;
     protected final PlayerHandler playerHandler;
 
-    private AbstractDamageCalculator damageCalculator;
+    protected AbstractDamageCalculator damageCalculator;
 
     public HitDetection(BetterHitDetectionPlugin plugin,
                         DamageCalculatorHandler damageCalculatorHandler,
@@ -37,13 +37,19 @@ public abstract class HitDetection {
         this.damageCalculator = damageCalculatorHandler.getDamageCalculator(presetHandler.getGlobalPreset().getSettings().damageHandler);
     }
 
-    protected boolean handleDamageAndIsCancelled(Player attacker, Player damaged) {
+    protected boolean handleDamageAndIsCancelled(PlayerData attackerData, PlayerData damagedData) {
         PlayerAttackPlayerEvent playerAttackPlayerEvent =
-                new PlayerAttackPlayerEvent(true, attacker, damaged, (float) damageCalculator.calculateDamage(attacker, damaged));
+                new PlayerAttackPlayerEvent(true, attackerData.player, damagedData.player,
+                        (float) damageCalculator.calculateDamage(attackerData, damagedData));
         Bukkit.getPluginManager().callEvent(playerAttackPlayerEvent);
 
         boolean cancelled = playerAttackPlayerEvent.isCancelled();
-        if(!cancelled) damaged.setHealth(damaged.getHealth() - playerAttackPlayerEvent.getRawDamage());
+        if(!cancelled) {
+            damagedData.player.setHealth(damagedData.player.getHealth() - playerAttackPlayerEvent.getRawDamage());
+
+            // Extra affects method has to be run from the main thread
+            Bukkit.getScheduler().runTask(plugin, () -> damageCalculator.applyExtraAffects(attackerData, damagedData));
+        }
         return cancelled;
     }
 

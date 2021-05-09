@@ -1,4 +1,19 @@
-Todo (0.4.1) update:
+##############################################
+0.4.3 update:
+- advanced api [ ]
+- pot throw velocity?
+
+##############################################
+0.4.2 update:
+- api                [DONE]
+- pot throw velocity [----]    --> for 0.4.3
+- damage calculators now handle more [DONE]
+- damage calculators gui [DONE]
+- select global preset from gui [DONE]
+- apply/view/remove local presets from players [----]    --> for 0.4.3 (partially done, only through commands)
+
+###############################################
+0.4.1 update:
 - pot throw           [----]    --> for 0.4.2
 - non-static handlers [DONE]
 - redo theme          [DONE]
