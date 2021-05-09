@@ -3,6 +3,7 @@ package me.michqql.bhd.gui;
 import me.michqql.bhd.presets.Preset;
 import me.michqql.bhd.presets.PresetHandler;
 import me.michqql.inventorylib.GUI;
+import me.michqql.inventorylib.InventoryLibPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,8 +36,18 @@ public class PresetGUI extends GUI {
     @Override
     protected void updateInventory() {
         {
+            ItemStack back = new ItemStack(Material.ARROW);
+            ItemMeta meta = back.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName(ChatColor.RED + "<-- Go back");
+                back.setItemMeta(meta);
+            }
+            this.inventory.setItem(0, back);
+        }
+
+        {
             // Global Preset
-            ItemStack item = new ItemStack(Material.EMERALD_BLOCK);
+            ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
             ItemMeta meta = item.getItemMeta();
             if(meta != null) {
                 meta.setDisplayName(ChatColor.BLUE + "Global Preset");
@@ -56,19 +68,23 @@ public class PresetGUI extends GUI {
             if (slot >= inventory.getSize())
                 break;
 
-            ItemStack item = new ItemStack(Material.EMERALD);
+            ItemStack item = new ItemStack(Material.BOOK);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 boolean global = presetHandler.getGlobalPreset().getId().equals(preset.getId());
-
                 meta.setDisplayName(ChatColor.AQUA + (global ? "Global " : "") + "Preset: " + preset.getId());
-                meta.setLore(Collections.singletonList(
-                        ChatColor.GRAY + "Click to edit preset"
-                ));
 
                 if (global) {
+                    meta.setLore(Collections.singletonList(
+                            ChatColor.YELLOW + "LEFT CLICK " + ChatColor.WHITE + "to edit"
+                    ));
                     meta.addEnchant(Enchantment.DURABILITY, 1, true);
                     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                } else {
+                    meta.setLore(Arrays.asList(
+                            ChatColor.YELLOW + "LEFT CLICK "  + ChatColor.WHITE + "to edit",
+                            ChatColor.YELLOW + "RIGHT CLICK " + ChatColor.WHITE + "to make global"
+                    ));
                 }
 
                 item.setItemMeta(meta);
@@ -83,6 +99,11 @@ public class PresetGUI extends GUI {
 
     @Override
     protected boolean onClickEvent(int slot, ClickType clickType) {
+        if(slot == 0) {
+            InventoryLibPlugin.openPreviousGUI(player.getUniqueId());
+            return true;
+        }
+
         // Clicked on a preset
         if(slot >= 9) {
             final List<Preset> presets = presetHandler.getPresets();
@@ -91,7 +112,15 @@ public class PresetGUI extends GUI {
                 return true;
 
             Preset preset = presets.get(index);
-            new SettingsGUI(bukkitPlugin, player, preset).openGUI();
+            if(preset == null)
+                return true;
+
+            if(clickType == ClickType.LEFT)
+                new SettingsGUI(bukkitPlugin, player, preset).openGUI();
+            else {
+                presetHandler.setGlobalPreset(preset);
+                updateInventory();
+            }
         }
         return true;
     }

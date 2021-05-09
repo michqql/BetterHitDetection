@@ -9,4 +9,4 @@ comboX: 0.3
 comboY: 0.4
 potX: 1.0
 potY: 1.0
-damageCalculator: 'nms'
+damageCalculator: 'vanilla'

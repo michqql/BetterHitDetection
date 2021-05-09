@@ -25,11 +25,11 @@ public class KnockBackCommand implements CommandExecutor {
 
         if(args.length == 0) {
             sender.sendMessage("");
-            sender.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "[BetterHitDetection] " + ChatColor.WHITE + "Settings command:");
-            sender.sendMessage(ChatColor.YELLOW + "/settings cooldown <length> <cancel> <immunity>");
-            sender.sendMessage(ChatColor.YELLOW + "/settings kb <x> <y>");
-            sender.sendMessage(ChatColor.YELLOW + "/settings combo <period> <x> <y>");
-            sender.sendMessage(ChatColor.YELLOW + "/settings pots <x> <y>");
+            sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "[BetterHitDetection] " + ChatColor.WHITE + "Settings command:");
+            sender.sendMessage(ChatColor.AQUA + "/settings cooldown <length> <cancel> <immunity>");
+            sender.sendMessage(ChatColor.AQUA + "/settings kb <x> <y>");
+            sender.sendMessage(ChatColor.AQUA + "/settings combo <period> <x> <y>");
+            sender.sendMessage(ChatColor.AQUA + "/settings pots <x> <y>");
             sender.sendMessage("");
             return true;
         }

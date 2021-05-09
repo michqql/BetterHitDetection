@@ -10,4 +10,4 @@ comboY: 1
 comboDamageMultiplier: 1
 potX: 1.0
 potY: 1.0
-damageCalculator: 'nms'
+damageCalculator: 'vanilla'

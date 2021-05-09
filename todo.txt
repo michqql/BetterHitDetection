@@ -1,12 +1,24 @@
-Todo:
+##############################################
+0.4.3 update:
+- advanced api [ ]
+- pot throw velocity?
 
-- calculate accurate damage    [DONE]
-- per player settings          [DONE]
-- gui's                        [DONE]
-- default anti cheat detection [DONE]
-  > 3 blocks max range
+##############################################
+0.4.2 update:
+- api                [DONE]
+- pot throw velocity [----]    --> for 0.4.3
+- damage calculators now handle more [DONE]
+- damage calculators gui [DONE]
+- select global preset from gui [DONE]
+- apply/view/remove local presets from players [----]    --> for 0.4.3 (partially done, only through commands)
 
-##################################
-Ideas:
-- armor knockback?
-- pitched based pot throw distance
+###############################################
+0.4.1 update:
+- pot throw           [----]    --> for 0.4.2
+- non-static handlers [DONE]
+- redo theme          [DONE]
+
+Handlers:
+ - main class
+ - damage handler
+ - player handler

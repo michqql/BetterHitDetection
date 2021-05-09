@@ -15,13 +15,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class SettingsGUI extends GUI {
 
-    private final static int COOLDOWN = 3;
-    private final static int KNOCKBACK = 4;
+    private final static int COOLDOWN = 2;
+    private final static int KNOCKBACK = 3;
     private final static int COMBO = 5;
+    private final static int DAMAGE_CALCULATOR = 6;
 
     private final static int BACK = 13;
 
@@ -77,7 +79,7 @@ public class SettingsGUI extends GUI {
 
         {
             // Combo
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
+            ItemStack item = new ItemStack(Material.GOLDEN_APPLE);
             ItemMeta meta = item.getItemMeta();
             if(meta != null) {
                 meta.setDisplayName(ChatColor.AQUA + "Combo Settings");
@@ -88,6 +90,23 @@ public class SettingsGUI extends GUI {
                 item.setItemMeta(meta);
             }
             this.inventory.setItem(COMBO, item);
+        }
+
+        {
+            // Combo
+            ItemStack item = new ItemStack(Material.IRON_SWORD);
+            ItemMeta meta = item.getItemMeta();
+            if(meta != null) {
+                meta.setDisplayName(ChatColor.AQUA + "Damage Calculator");
+                meta.setLore(Arrays.asList(
+                        ChatColor.GRAY + "Currently: " + preset.getSettings().damageHandler,
+                        "",
+                        ChatColor.YELLOW + "TYPE /damage " + ChatColor.GRAY + "for more options"
+                ));
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                item.setItemMeta(meta);
+            }
+            this.inventory.setItem(DAMAGE_CALCULATOR, item);
         }
     }
 

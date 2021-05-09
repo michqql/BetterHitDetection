@@ -66,6 +66,9 @@ public class PresetDataFile {
 
     protected void copy(Plugin plugin) {
         InputStream in = plugin.getResource(path);
+        if(in == null)
+            in = plugin.getResource("presets/default.yml");
+
         if(in == null) return;
 
         try {
